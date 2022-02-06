@@ -1,13 +1,13 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.nio.file.Path;
 import java.util.Scanner;
 
 public class Main {
-    static String[] Name = new String[5906];
-    static int[] Month = new int[5906];
-    static int[] Day = new int[5906];
-    static String path = "C:\\Users\\Administrator\\IdeaProjects\\Seerch\\src\\data\\vardi.txt";
+    static String[] data = new String[5095];
+
+    static String[] Name = new String[5095];
+    static int[] Month = new int[5095];
+    static int[] Day = new int[5095];
 
     public static void main(String[] args) {
         makeData();
@@ -27,34 +27,26 @@ public class Main {
     }
 
     public static void makeData() {
-        String[] data = getData();
+        getData();
         String[] split = new String[3];
 
-        for (int i = 0; i < 5906; i++) {
+        for (int i = 0; i < 5095; i++) {
             split = data[i].split(";");
             Name[i] = split[0];
-            Month[i] = Integer.parseInt(split[1]);
-            Day[i] = Integer.parseInt(split[2]);
+            Month[i] = Integer.parseInt(split[2]);
+            Day[i] = Integer.parseInt(split[1]);
         }
     }
 
-    public static String[] getData() {
-        String[] data = new String[5906];
-
-        Scanner scanner = null;
+    public static void getData(){
         try {
-            scanner = new Scanner(new File(String.valueOf(path)));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            Scanner scan = new Scanner(new File("src\\vardi.txt"));
+            for(int i=0;i<5095;i++){
+                data[i] = scan.next();
+            }
+        } catch (FileNotFoundException ex) {
+            System.out.println("ISSUE: file not found");
         }
-        scanner.useDelimiter("\n");
-
-        int i;
-        for (i = 0; scanner.hasNext(); i++) {
-            data[i] = scanner.nextLine();
-        }
-
-        return data;
     }
 
     public static boolean getNameOrDate() {
@@ -89,7 +81,7 @@ public class Main {
     }
 
     public static String searchByName(String name) {
-        for (int i = 0; i < 5906; i++) {
+        for (int i = 0; i < 5095; i++) {
             if (Name[i].equals(name)) {
                 return "" + Month[i] + "." + Day[i];
             }
@@ -150,8 +142,10 @@ public class Main {
         }
         int start;
         int end;
-        for (start = month; Month[start] == date[0]; start--) { }
-        for (end = month; Month[end] == date[0]; end++) { }
+        for (start = month; Month[start] == date[0]; start--) {
+        }
+        for (end = month; Month[end] == date[0]; end++) {
+        }
         start += 1;
         end -= 1;
 
@@ -167,7 +161,7 @@ public class Main {
 
         String answer = "";
         for (; start <= end; start++) {
-            answer += Name[start];
+            answer += Name[start] + "\n";
         }
         return answer;
     }
@@ -180,7 +174,7 @@ public class Main {
             int i = (end + start)/2;
             if (Month[i] == month) {
                 return i;
-            } else if (Month[i] < month) {
+            } else if (Month[i] > month) {
                 end = i;
             } else {
                 start = i;
@@ -194,7 +188,7 @@ public class Main {
             int i = (end + start)/2;
             if (Day[i] == day) {
                 return i;
-            } else if (Day[i] < day) {
+            } else if (Day[i] > day) {
                 end = i;
             } else {
                 start = i;
